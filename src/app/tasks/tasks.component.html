@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" *ngIf="tasks$ | async as tasks">
   <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
   <p-toolbar styleClass="mb-4 gap-2">
     <ng-template pTemplate="left">
@@ -15,7 +15,7 @@
 
   <p-table
     #tasksTable
-    [value]="tasks$ | async"
+    [value]="tasks"
     [paginator]="true"
     [globalFilterFields]="['name', 'type', 'fields.durationInHours', 'fields.room', 'fields.who']"
     [rows]="5"

@@ -3,6 +3,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 
 import { TasksService } from '../core/tasks-api/v1';
+import { Task } from '../shared/task-factory/task.interface';
 
 @Component({
   selector: 'app-tasks',
@@ -11,7 +12,7 @@ import { TasksService } from '../core/tasks-api/v1';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TasksComponent implements OnInit {
-  tasks$!: Observable<any>;
+  tasks$!: Observable<Task[]>;
 
   constructor(
     private tasksService: TasksService,
@@ -24,12 +25,12 @@ export class TasksComponent implements OnInit {
     this.tasks$ = this.tasksService.appControllerFindAll();
   }
 
-  editTask(task: any) {
+  editTask(task: Task) {
     this.messageService.add({ severity: 'info', summary: 'Task Selected', detail: task.name });
   }
 
   //TO-DO change any to Task
-  deleteTask(task: any) {
+  deleteTask(task: Task) {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete ' + task.name + '?',
       header: 'Confirm',
