@@ -1,4 +1,5 @@
 <div class="card">
+  <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
   <p-toolbar styleClass="mb-4 gap-2">
     <ng-template pTemplate="left">
       <span class="p-input-icon-left">
@@ -37,7 +38,7 @@
         <td>{{ task.fields | json }}</td>
         <td>
           <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editTask(task)"></button>
-          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="editTask(task)"></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteTask(task)"></button>
         </td>
       </tr>
     </ng-template>

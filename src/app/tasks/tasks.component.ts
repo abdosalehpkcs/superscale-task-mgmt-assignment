@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 
 import { TasksService } from '../core/tasks-api/v1';
@@ -16,6 +16,7 @@ export class TasksComponent implements OnInit {
   constructor(
     private tasksService: TasksService,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -25,5 +26,23 @@ export class TasksComponent implements OnInit {
 
   editTask(task: any) {
     this.messageService.add({ severity: 'info', summary: 'Task Selected', detail: task.name });
+  }
+
+  //TO-DO change any to Task
+  deleteTask(task: any) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete ' + task.name + '?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        // TO-DO remove task, send call to api
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: `Task ${task.name} Deleted`,
+          life: 3000,
+        });
+      },
+    });
   }
 }

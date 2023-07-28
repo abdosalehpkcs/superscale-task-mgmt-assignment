@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 
@@ -11,7 +12,7 @@ import { TasksRoutes } from './tasks.routing';
 
 @NgModule({
   declarations: [TasksComponent],
-  imports: [RouterModule.forChild(TasksRoutes), CommonModule, SharedModule, InputTextModule, TableModule],
+  imports: [RouterModule.forChild(TasksRoutes), CommonModule, SharedModule, ConfirmDialogModule, InputTextModule, TableModule],
   providers: [ConfirmationService],
 })
 export class TasksModule {}
