@@ -22,6 +22,7 @@ export interface UpdateTaskDto {
   type: UpdateTaskDto.TypeEnum;
   fields: CreateTaskDtoFields;
 }
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace UpdateTaskDto {
   export type TypeEnum = 'wash-dishes' | 'vacuum-clean';
   export const TypeEnum = {

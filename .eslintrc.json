@@ -30,14 +30,13 @@
             "style": "kebab-case"
           }
         ],
-        "no-underscore-dangle": ["error"],
         "simple-import-sort/imports": "error",
         "simple-import-sort/exports": "error"
       }
     },
     {
       "files": ["*.html"],
-      "extends": ["plugin:@angular-eslint/template/recommended", "plugin:@angular-eslint/template/accessibility"],
+      "extends": ["plugin:@angular-eslint/template/recommended"],
       "rules": {}
     }
   ]

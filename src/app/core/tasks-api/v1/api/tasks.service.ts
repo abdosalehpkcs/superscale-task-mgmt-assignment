@@ -17,18 +17,15 @@ import { Observable } from 'rxjs';
 
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
-// @ts-ignore
 import { CreateTaskDto } from '../model/createTaskDto';
-// @ts-ignore
 import { UpdateTaskDto } from '../model/updateTaskDto';
-// @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
+import { BASE_PATH } from '../variables';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TasksService {
-  protected basePath = 'http://localhost';
+  protected basePath = 'http://64.225.105.163:3000';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
   public encoder: HttpParameterCodec;
@@ -54,7 +51,6 @@ export class TasksService {
     this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
   }
 
-  // @ts-ignore
   private addToHttpParams(httpParams: HttpParams, value: any, key?: string): HttpParams {
     if (typeof value === 'object' && value instanceof Date === false) {
       httpParams = this.addToHttpParamsRecursive(httpParams, value);
