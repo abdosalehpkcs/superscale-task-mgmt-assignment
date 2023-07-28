@@ -1,0 +1,90 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Frontend Assignment",
+    "description": "Use this backend server for development of your frontend asignment. No API key is required to access the API.",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "WashDishesFields": {
+        "type": "object",
+        "properties": { "durationInHours": { "type": "number", "description": "How many hours will the washing dishes take", "example": 1 } },
+        "required": ["durationInHours"]
+      },
+      "VacuumCleanFields": {
+        "type": "object",
+        "properties": {
+          "who": { "type": "string", "description": "How will be vacuum cleaning", "example": "John Doe" },
+          "room": { "type": "string", "description": "Which room will be vacuum cleaned", "example": "Living room" }
+        },
+        "required": ["who", "room"]
+      },
+      "CreateTaskDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "Name of the task", "example": "Evening washing" },
+          "type": { "type": "string", "description": "Type of the task", "example": "wash-dishes", "enum": ["wash-dishes", "vacuum-clean"] },
+          "fields": { "oneOf": [{ "$ref": "#/components/schemas/WashDishesFields" }, { "$ref": "#/components/schemas/VacuumCleanFields" }] }
+        },
+        "required": ["name", "type", "fields"]
+      },
+      "UpdateTaskDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "Name of the task", "example": "Evening washing" },
+          "type": { "type": "string", "description": "Type of the task", "example": "wash-dishes", "enum": ["wash-dishes", "vacuum-clean"] },
+          "fields": { "oneOf": [{ "$ref": "#/components/schemas/WashDishesFields" }, { "$ref": "#/components/schemas/VacuumCleanFields" }] }
+        },
+        "required": ["name", "type", "fields"]
+      }
+    }
+  },
+  "paths": {
+    "/tasks": {
+      "post": {
+        "operationId": "AppController_create",
+        "parameters": [],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateTaskDto" } } } },
+        "responses": { "201": { "description": "The task has been successfully created." }, "400": { "description": "Invalid format of the task." } },
+        "tags": ["Tasks"]
+      },
+      "get": {
+        "operationId": "AppController_findAll",
+        "parameters": [],
+        "responses": { "200": { "description": "List of all tasks has been returned." } },
+        "tags": ["Tasks"]
+      }
+    },
+    "/tasks/{id}": {
+      "get": {
+        "operationId": "AppController_findOne",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "The task with given id has been returned." },
+          "404": { "description": "The task with given id doesn't exist" }
+        },
+        "tags": ["Tasks"]
+      },
+      "put": {
+        "operationId": "AppController_update",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateTaskDto" } } } },
+        "responses": {
+          "200": { "description": "The task with given id has been updated." },
+          "404": { "description": "The task with given id doesn't exist" }
+        },
+        "tags": ["Tasks"]
+      },
+      "delete": {
+        "operationId": "AppController_remove",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": { "204": { "description": "The task has been removed" }, "404": { "description": "The task with given id doesn't exist" } },
+        "tags": ["Tasks"]
+      }
+    }
+  }
+}
