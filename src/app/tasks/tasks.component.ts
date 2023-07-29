@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable, of, startWith } from 'rxjs';
 
 import { TasksService } from '../core/tasks-api/v1';
 import { Task } from '../shared/task-factory/task.interface';
@@ -12,8 +12,7 @@ import { Task } from '../shared/task-factory/task.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TasksComponent implements OnInit {
-  tasks$!: Observable<Task[]>;
-
+  tasks$!: Observable<{ loading: boolean; value: Task[] }>;
   constructor(
     private tasksService: TasksService,
     private messageService: MessageService,
@@ -22,7 +21,16 @@ export class TasksComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.tasks$ = this.tasksService.appControllerFindAll();
+    this.tasks$ = this.tasksService.appControllerFindAll().pipe(
+      map((value: Task[]) => ({ loading: false, value: value })),
+      startWith({
+        loading: true,
+        value: [],
+      }),
+      catchError(() => {
+        return of({ loading: false, value: [] });
+      }),
+    );
   }
 
   editTask(task: Task) {
