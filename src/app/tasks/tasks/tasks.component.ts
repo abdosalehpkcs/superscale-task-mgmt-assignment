@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { BehaviorSubject, catchError, map, Observable, of, startWith, switchMap } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ConfirmationService } from 'primeng/api';
+import { catchError, map, of, startWith, Subscription } from 'rxjs';
 
 import { TasksService } from '../../core/tasks-api/v1';
 import { Task } from '../../shared/task-factory/task.interface';
@@ -11,38 +11,43 @@ import { Task } from '../../shared/task-factory/task.interface';
   styleUrls: ['./tasks.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TasksComponent implements OnInit {
-  private refresh$ = new BehaviorSubject<void>(undefined);
-  tasks$!: Observable<{ loading: boolean; value: Task[] }>;
-
+export class TasksComponent implements OnInit, OnDestroy {
+  private subscription = new Subscription();
+  tasksData: Task[] = [];
+  loading = false;
   taskDialog = false;
-
   task: Task = {} as Task;
-
-  submitted = false;
 
   constructor(
     private tasksService: TasksService,
-    private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
-    this.tasks$ = this.refresh$.pipe(
-      switchMap(() =>
-        this.tasksService.appControllerFindAll().pipe(
-          map((value: Task[]) => ({ loading: false, value: value })),
-          startWith({
-            loading: true,
-            value: [],
-          }),
-          catchError(() => {
-            return of({ loading: false, value: [] });
-          }),
-        ),
-      ),
-    );
+    const tasksSubscription = this.tasksService
+      .appControllerFindAll()
+      .pipe(
+        map((value: Task[]) => ({ loading: false, value: value })),
+        startWith({
+          loading: true,
+          value: [],
+        }),
+        catchError(() => {
+          return of({ loading: false, value: [] });
+        }),
+      )
+      .subscribe((response: { loading: boolean; value: Task[] }) => {
+        this.tasksData = response.value;
+        this.loading = response.loading;
+        this.cdr.detectChanges();
+      });
+
+    this.subscription.add(tasksSubscription);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   createTask() {
@@ -53,26 +58,20 @@ export class TasksComponent implements OnInit {
   editTask(task: Task) {
     this.task = { ...task };
     this.taskDialog = true;
-    this.messageService.add({ severity: 'info', summary: 'Task Selected', detail: task.name });
   }
 
-  deleteTask(task: Task) {
+  deleteTask(taskToRemove: Task) {
+    const taskIdToRemove = taskToRemove._id!;
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete ' + task.name + '?',
+      message: 'Are you sure you want to delete ' + taskToRemove.name + '?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.tasksService.appControllerRemove(task._id!).subscribe((response: unknown) => {
-          //TO-DO move to interceptor
-
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Successful',
-            detail: `Task ${task.name} Deleted`,
-            life: 3000,
-          });
-          this.refresh$.next();
+        const tasksDeleteSubscription = this.tasksService.appControllerRemove(taskIdToRemove).subscribe((response: any) => {
+          this.tasksData = this.tasksData.filter((task) => task._id !== taskToRemove._id);
+          this.cdr.detectChanges();
         });
+        this.subscription.add(tasksDeleteSubscription);
       },
     });
   }

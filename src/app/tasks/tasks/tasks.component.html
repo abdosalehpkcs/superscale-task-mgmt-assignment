@@ -1,6 +1,4 @@
-<ng-container *ngIf="tasks$ | async as tasks">
-  <p-toast></p-toast>
-
+<ng-container>
   <div class="card">
     <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
     <p-toolbar styleClass="mb-4 gap-2">
@@ -17,9 +15,9 @@
     </p-toolbar>
 
     <p-table
-      [loading]="tasks.loading"
+      [loading]="loading"
       #tasksTable
-      [value]="tasks.value"
+      [value]="tasksData"
       [paginator]="true"
       [globalFilterFields]="['name', 'type', 'fields.durationInHours', 'fields.room', 'fields.who']"
       [rows]="5"
@@ -57,5 +55,5 @@
 </ng-container>
 
 <ng-container *ngIf="taskDialog">
-  <app-task-dialog [(isDialogVisible)]="taskDialog" [task]="task"></app-task-dialog>
+  <app-task-dialog [(isDialogVisible)]="taskDialog" [task]="task" [(tasksData)]="tasksData"></app-task-dialog>
 </ng-container>
