@@ -1,4 +1,6 @@
 <ng-container *ngIf="tasks$ | async as tasks">
+  <p-toast></p-toast>
+
   <div class="card">
     <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
     <p-toolbar styleClass="mb-4 gap-2">
@@ -10,7 +12,7 @@
       </ng-template>
 
       <ng-template pTemplate="right">
-        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"></button>
+        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="createTask()"></button>
       </ng-template>
     </p-toolbar>
 
@@ -52,4 +54,8 @@
       </ng-template>
     </p-table>
   </div>
+</ng-container>
+
+<ng-container *ngIf="taskDialog">
+  <app-task-dialog [(isDialogVisible)]="taskDialog" [task]="task"></app-task-dialog>
 </ng-container>

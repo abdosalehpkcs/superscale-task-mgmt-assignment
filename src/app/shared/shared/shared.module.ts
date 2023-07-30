@@ -7,7 +7,7 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 @NgModule({
   declarations: [],
-  imports: [CommonModule, ToastModule, MessageModule, ToolbarModule, ButtonModule],
+  imports: [CommonModule, MessageModule, ToolbarModule, ToastModule, ButtonModule],
   exports: [ToastModule, MessageModule, ToolbarModule, ButtonModule],
   providers: [MessageService, ConfirmationService],
 })

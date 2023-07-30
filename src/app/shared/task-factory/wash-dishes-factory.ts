@@ -8,7 +8,7 @@ export class WashDishesFactory implements TaskFactory {
       type: 'wash-dishes',
       name,
       fields: {
-        durationInHours: fields.durationInHours || 0,
+        durationInHours: fields?.durationInHours || 0,
       },
     };
   }

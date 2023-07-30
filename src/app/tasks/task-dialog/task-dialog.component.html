@@ -1,0 +1,45 @@
+<p-dialog
+  [(visible)]="isDialogVisible"
+  [style]="{ width: '450px', height: '500px' }"
+  header="Task details"
+  [modal]="true"
+  [closable]="false"
+  [closeOnEscape]="true"
+  styleClass="p-fluid">
+  <ng-template pTemplate="content">
+    <div class="field">
+      <label for="name">Name</label>
+      <input type="text" pInputText id="name" [(ngModel)]="task.name" required autofocus />
+      <small class="p-error" *ngIf="!task.name">Name is required.</small>
+    </div>
+
+    <div class="field">
+      <label for="type">Type</label>
+      <p-dropdown [(ngModel)]="task.type" inputId="type" (onChange)="onTypeChange()" [options]="typeOptions" placeholder="Select">
+        <ng-template let-option pTemplate="item">
+          <span>{{ option }}</span>
+        </ng-template>
+      </p-dropdown>
+      <small class="p-error" *ngIf="!task.type">Type is required.</small>
+    </div>
+
+    <div *ngFor="let dynamicTaskField of task.fields | jsonToTaskFields" class="field">
+      <label for="key">{{ dynamicTaskField.key }}</label>
+      <input
+        type="{{ dynamicTaskField.valueType }}"
+        (change)="onFieldInputChange($event, dynamicTaskField)"
+        value="{{ dynamicTaskField.value }}"
+        pInputText
+        required
+        autofocus />
+      <small class="p-error" *ngIf="!dynamicTaskField.value"
+        >{{ dynamicTaskField.key.substr(0, 1).toUpperCase() + dynamicTaskField.key.substr(1) }} is required.</small
+      >
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTask()"></button>
+  </ng-template>
+</p-dialog>
