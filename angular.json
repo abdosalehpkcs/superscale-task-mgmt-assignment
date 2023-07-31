@@ -78,12 +78,15 @@
           }
         },
         "test": {
-          "builder": "ngx-build-plus:karma",
+          "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
+            "karmaConfig": "karma.conf.js",
             "assets": ["src/favicon.ico", "src/assets"],
+            "codeCoverageExclude": ["src/app/core/tasks-api/**/*"],
+            "codeCoverage": true,
+            "inlineStyleLanguage": "scss",
             "styles": ["src/styles.scss"],
             "scripts": []
           }
