@@ -1,0 +1,63 @@
+<ng-container>
+  <div class="card">
+    <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+    <p-toolbar styleClass="mb-4 gap-2">
+      <ng-template pTemplate="left">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="tasksTable.filterGlobal($any($event.target).value, 'contains')" placeholder="Search..." />
+        </span>
+      </ng-template>
+
+      <ng-template pTemplate="right">
+        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="createTask()"></button>
+      </ng-template>
+    </p-toolbar>
+
+    <p-table
+      [loading]="loading"
+      #tasksTable
+      [value]="tasksData"
+      [paginator]="true"
+      [globalFilterFields]="['name', 'type', 'fields.durationInHours', 'fields.room', 'fields.who']"
+      [rows]="5"
+      [showCurrentPageReport]="true"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [rowsPerPageOptions]="[5, 15, 25]">
+      <ng-template pTemplate="header">
+        <tr>
+          <th id="ss-tasks-name" pSortableColumn="name" style="width: 28%" pResizableColumn>Name <p-sortIcon field="name"></p-sortIcon></th>
+          <th id="ss-tasks-type" pSortableColumn="type" style="width: 28%" pResizableColumn>Type <p-sortIcon field="type"></p-sortIcon></th>
+          <th id="ss-tasks-fields" pSortableColumn="fields" style="width: 28%">Fields</th>
+          <th id="ss-tasks-actions" style="width: 16%"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-task>
+        <tr>
+          <td>{{ task.name }}</td>
+          <td>{{ task.type }}</td>
+          <td>
+            <div *ngFor="let dynamicTaskField of task.fields | jsonToTaskFields" class="field">
+              <span> {{ dynamicTaskField.key }} : {{ dynamicTaskField.value }}</span>
+            </div>
+          </td>
+          <td>
+            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editTask(task)"></button>
+            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteTask(task)"></button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="4" style="text-align: center">No records found</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="taskDialog">
+  <app-task-dialog [(isDialogVisible)]="taskDialog" [task]="task" [(tasksData)]="tasksData"></app-task-dialog>
+</ng-container>

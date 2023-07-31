@@ -5,10 +5,12 @@ import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+
+import { JsonToTaskFieldsPipe } from '../../pipes/json-to-task-fields.pipe';
 @NgModule({
-  declarations: [],
-  imports: [CommonModule, ToastModule, MessageModule, ToolbarModule, ButtonModule],
-  exports: [ToastModule, MessageModule, ToolbarModule, ButtonModule],
+  declarations: [JsonToTaskFieldsPipe],
+  imports: [CommonModule, MessageModule, ToolbarModule, ToastModule, ButtonModule],
+  exports: [ToastModule, MessageModule, ToolbarModule, ButtonModule, JsonToTaskFieldsPipe],
   providers: [MessageService, ConfirmationService],
 })
 export class SharedModule {}

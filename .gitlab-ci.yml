@@ -1,0 +1,54 @@
+services:
+  - docker:dind
+
+variables:
+  CI_DEBUG_TRACE: 'true'
+
+stages:
+  - dependencies
+  - build
+  - publish
+
+install_dependencies:
+  image: node:latest
+  stage: dependencies
+  script:
+    - npm ci
+  only:
+    - main
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - node_modules
+
+build_image:
+  image: node:latest
+  stage: build
+  script:
+    - npm link @angular/cli@14.2.11
+    - BUILD_ENV=$(if [ "$CI_COMMIT_REF_NAME" == "main" ]; then echo "production"; else echo "$CI_COMMIT_REF_NAME"; fi) npm run build
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/dist
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - node_modules
+    policy: pull
+  only:
+    - main
+
+push_image_main:
+  image: docker:latest
+  stage: publish
+  only:
+    - main
+  script:
+    - apk add --no-cache git
+    - docker build -t registry.gitlab.com/$DOCKER_USER_NAME/superscaletaskmgmt:stable .
+    - docker login -u $DOCKER_USER_NAME -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker push registry.gitlab.com/$DOCKER_USER_NAME/superscaletaskmgmt:stable
