@@ -1,90 +1,67 @@
-// Karma configuration
-// Generated on Mon Jul 31 2023 17:39:29 GMT+0200 (Central European Summer Time)
+// Karma configuration file, see link for more information
+// https://karma-runner.github.io/1.0/config/configuration-file.html
 
 module.exports = function (config) {
   config.set({
-    // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
-
-    // frameworks to use
-    // available frameworks: https://www.npmjs.com/search?q=keywords:karma-adapter
-    frameworks: ['jasmine'],
-
-    plugings: [
+    frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    plugins: [
       require('karma-jasmine'),
-      require('karma-jasmine-html-reporter'),
-      require('karma-coverage'),
-      require('karma-junit-reporter'),
       require('karma-chrome-launcher'),
+      require('karma-jasmine-html-reporter'),
+      require('karma-junit-reporter'),
+      require('karma-coverage'),
+      require('@angular-devkit/build-angular/plugins/karma'),
     ],
-
     client: {
       jasmine: {
-        random: false,
+        // you can add configuration options for Jasmine here
+        // the possible options are listed at https://jasmine.github.io/api/edge/Configuration.html
+        // for example, you can disable the random execution with `random: false`
+        // or set a specific seed with `seed: 4321`
+        random: false, // disable the random running order
       },
-      clearContext: false,
+      clearContext: false, // leave Jasmine Spec Runner output visible in browser
     },
-
     jasmineHtmlReporter: {
-      suppressAll: true, // Suppress all messages (overrides other suppress settings)
+      suppressAll: true, // removes the duplicated traces
     },
-
     junitReporter: {
       outputDir: 'artifacts/tests',
       outputFile: 'junit-test-results.xml',
-      useBrowserName: true,
+      useBrowserName: false,
     },
-
     coverageReporter: {
-      dir: './coverage/superscale-mgmt',
-      subdir: '',
-      reporters: [{ type: 'html', subdir: 'html-report' }],
+      dir: require('path').join(__dirname, './coverage/superscale-mgmt'),
+      subdir: '.',
+      reporters: [
+        { type: 'html', subdir: 'html-report' },
+        { type: 'lcov', subdir: 'lcov-report' },
+      ],
       check: {
         global: {
-          statments: 90,
+          statements: 90,
           branches: 90,
           functions: 90,
           lines: 90,
         },
       },
     },
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://www.npmjs.com/search?q=keywords:karma-reporter
     reporters: ['progress', 'kjhtml', 'junit', 'coverage'],
-
-    // web server port
     port: 9876,
-
-    // enable / disable colors in the output (reporters and logs)
     colors: true,
-
     failOnEmptyTestSuite: false,
-
     browserNoActivityTimeout: 30000,
-
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_INFO,
-
-    // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
-
-    // start these browsers
-    // available browser launchers: https://www.npmjs.com/search?q=keywords:karma-launcher
-    browsers: ['Chrome'],
-
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
+    browsers: ['Chrome', 'ChromeHeadlessCI'],
     singleRun: false,
-
+    restartOnFileChange: true,
     customLaunchers: {
-      Chrome_with_debugging: {
-        base: 'Chrome',
-        chromeDataDir: require('path').resolve(__dirname, '.chrome'),
+      ChromeHeadlessCI: {
+        base: 'ChromeHeadless',
+        flags: ['--headless', '--no-sandbox', '--disable-dev-shm-usage'],
       },
     },
-
-    restartOnFileChange: true,
   });
 };
