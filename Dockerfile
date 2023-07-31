@@ -9,6 +9,6 @@
 # Stage 2, use the built version and nginxifing it.
 FROM nginx:latest
 RUN rm -rf /usr/share/nginx/html/
-COPY /superscale-task-mgmt-assignment/ /usr/share/nginx/html/
+COPY /dist/superscale-task-mgmt-assignment/ /usr/share/nginx/html/
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
