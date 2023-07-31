@@ -8,7 +8,7 @@
     "build-state": "ng build --stats-json",
     "watch": "ng build --watch --configuration development",
     "analyze": "npx webpack-bundle-analyzer dist/superscale-task-mgmt-assignment/stats.json",
-    "test": "ng test",
+    "test": "ng test ",
     "eslint": "npx eslint \"src/**/**.{js,ts,html}\" --fix",
     "prettify": "npx prettier \"src/**/**.{js,ts,html}\" --write",
     "generate:api": "openapi-generator-cli generate -i ./tasks.api.json -g typescript-angular -o src/app/core/tasks-api/v1"
@@ -24,6 +24,7 @@
     "@angular/platform-browser": "^16.1.0",
     "@angular/platform-browser-dynamic": "^16.1.0",
     "@angular/router": "^16.1.0",
+    "karma-junit-reporter": "^2.0.1",
     "primeicons": "^6.0.1",
     "primeng": "^16.1.0",
     "rxjs": "~7.8.0",
@@ -31,7 +32,6 @@
     "zone.js": "~0.13.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^16.1.6",
     "@angular-eslint/builder": "16.1.0",
     "@angular-eslint/eslint-plugin": "16.1.0",
     "@angular-eslint/eslint-plugin-template": "16.1.0",
