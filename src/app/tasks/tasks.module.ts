@@ -9,7 +9,6 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 
-import { JsonToTaskFieldsPipe } from '../pipes/json-to-task-fields.pipe';
 import { SharedModule } from '../shared/shared/shared.module';
 import { TaskDialogComponent } from './task-dialog/task-dialog.component';
 import { TasksRoutes } from './tasks.routing';
@@ -17,7 +16,6 @@ import { TasksComponent } from './tasks/tasks.component';
 
 @NgModule({
   declarations: [TasksComponent, TaskDialogComponent],
-  exports: [JsonToTaskFieldsPipe],
   imports: [
     RouterModule.forChild(TasksRoutes),
     CommonModule,
