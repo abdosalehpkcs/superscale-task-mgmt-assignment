@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { catchError, EMPTY, Observable, tap } from 'rxjs';
-
+const MESSAGE_NOTIFICATION_LIFE_TIME = 3000;
 @Injectable()
 export class GeneralHttpInterceptor implements HttpInterceptor {
   constructor(private messageService: MessageService) {}
@@ -29,7 +29,7 @@ export class GeneralHttpInterceptor implements HttpInterceptor {
             severity: 'success',
             summary: summary,
             detail: message,
-            life: 3000,
+            life: MESSAGE_NOTIFICATION_LIFE_TIME,
           });
         }
       }),
@@ -47,7 +47,14 @@ export class GeneralHttpInterceptor implements HttpInterceptor {
             severity: 'error',
             summary: `Error ${error.status}`,
             detail: errorMessage,
-            life: 3000,
+            life: MESSAGE_NOTIFICATION_LIFE_TIME,
+          });
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: `Error ${error.status}`,
+            detail: 'Uknown Error',
+            life: MESSAGE_NOTIFICATION_LIFE_TIME,
           });
         }
 

@@ -1,4 +1,4 @@
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -11,7 +11,7 @@ import { SharedModule } from './shared/shared/shared.module';
 import { TasksModule } from './tasks/tasks.module';
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, HttpClientModule, SharedModule, TasksModule, ApiModule],
+  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, TasksModule, SharedModule, ApiModule],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
