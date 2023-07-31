@@ -37,7 +37,11 @@
         <tr>
           <td>{{ task.name }}</td>
           <td>{{ task.type }}</td>
-          <td>{{ task.fields | json }}</td>
+          <td>
+            <div *ngFor="let dynamicTaskField of task.fields | jsonToTaskFields" class="field">
+              <span> {{ dynamicTaskField.key }} : {{ dynamicTaskField.value }}</span>
+            </div>
+          </td>
           <td>
             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editTask(task)"></button>
             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteTask(task)"></button>

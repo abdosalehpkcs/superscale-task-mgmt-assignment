@@ -16,7 +16,7 @@ import { TasksRoutes } from './tasks.routing';
 import { TasksComponent } from './tasks/tasks.component';
 
 @NgModule({
-  declarations: [TasksComponent, TaskDialogComponent, JsonToTaskFieldsPipe],
+  declarations: [TasksComponent, TaskDialogComponent],
   exports: [JsonToTaskFieldsPipe],
   imports: [
     RouterModule.forChild(TasksRoutes),

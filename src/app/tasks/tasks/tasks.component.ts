@@ -67,7 +67,7 @@ export class TasksComponent implements OnInit, OnDestroy {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        const tasksDeleteSubscription = this.tasksService.appControllerRemove(taskIdToRemove).subscribe((response: any) => {
+        const tasksDeleteSubscription = this.tasksService.appControllerRemove(taskIdToRemove).subscribe(() => {
           this.tasksData = this.tasksData.filter((task) => task._id !== taskToRemove._id);
           this.cdr.detectChanges();
         });
