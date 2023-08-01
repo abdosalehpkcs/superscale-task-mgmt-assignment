@@ -81,7 +81,6 @@ export class TaskDialogComponent implements OnDestroy {
   }
 
   private parseValueBasedOnTaskFieldType(taskFieldType: string, taskFieldValue: string) {
-    console.log(taskFieldType);
     switch (taskFieldType) {
       case 'number':
         return Number(taskFieldValue);

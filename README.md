@@ -14,7 +14,7 @@ You can proceed to the next part once you have Node.js and npm installed.
 Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/superscale-task-mgmt-assignment.git
+git clone https://gitlab.com/north-excel/SuperScaleTaskMgmt.git
 cd superscale-task-mgmt-assignment
 npm install
 ```
