@@ -3,7 +3,7 @@ import { ConfirmationService } from 'primeng/api';
 import { catchError, map, of, startWith, Subscription } from 'rxjs';
 
 import { TasksService } from '../../core/tasks-api/v1';
-import { Task } from '../../shared/task-factory/task.interface';
+import { Task } from '../task-factory/task.interface';
 
 @Component({
   selector: 'app-tasks',

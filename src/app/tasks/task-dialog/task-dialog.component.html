@@ -1,6 +1,6 @@
 <p-dialog
   [(visible)]="isDialogVisible"
-  [style]="{ width: '450px', height: '500px' }"
+  [style]="{ width: '450px', height: '62vh' }"
   header="Task details"
   [modal]="true"
   [closable]="false"
@@ -24,7 +24,7 @@
     </div>
 
     <div *ngFor="let dynamicTaskField of task.fields | jsonToTaskFields" class="field">
-      <label for="key">{{ dynamicTaskField.key }}</label>
+      <label for="key">{{ dynamicTaskField.key | titlecase }}</label>
       <input
         type="{{ dynamicTaskField.valueType }}"
         (change)="onFieldInputChange($event, dynamicTaskField)"

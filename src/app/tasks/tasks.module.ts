@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { SharedModule } from '../shared/shared/shared.module';
+import { SharedModule } from '../shared/shared.module';
 import { TaskDialogComponent } from './task-dialog/task-dialog.component';
 import { TasksRoutes } from './tasks.routing';
 import { TasksComponent } from './tasks/tasks.component';

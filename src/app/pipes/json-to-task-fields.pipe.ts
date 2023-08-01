@@ -17,10 +17,10 @@ export class JsonToTaskFieldsPipe implements PipeTransform {
       this.map.set(key, input[key]);
     }
 
-    return Array.from(this.map.keys()).map((key) => ({
-      key: key,
-      value: this.map.get(key),
-      valueType: typeof this.map.get(key),
+    return Array.from(this.map.entries()).map(([key, value]) => ({
+      key,
+      value,
+      valueType: value instanceof Date && value.valueOf() > 0 ? 'date' : typeof value,
     }));
   }
 }

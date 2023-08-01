@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { Subscription } from 'rxjs';
 
 import { TasksService } from '../../core/tasks-api/v1';
-import { Task, TypeEnum } from '../../shared/task-factory/task.interface';
-import { TaskManager } from '../../shared/task-factory/task-manager';
+import { Task, TypeEnum } from '../task-factory/task.interface';
+import { TaskManager } from '../task-factory/task-manager';
 
 @Component({
   selector: 'app-task-dialog',
@@ -81,6 +81,7 @@ export class TaskDialogComponent implements OnDestroy {
   }
 
   private parseValueBasedOnTaskFieldType(taskFieldType: string, taskFieldValue: string) {
+    console.log(taskFieldType);
     switch (taskFieldType) {
       case 'number':
         return Number(taskFieldValue);
@@ -88,6 +89,8 @@ export class TaskDialogComponent implements OnDestroy {
         return String(taskFieldValue);
       case 'boolean':
         return Boolean(taskFieldValue);
+      case 'date':
+        return new Date(taskFieldValue);
       default:
         return taskFieldValue;
     }
