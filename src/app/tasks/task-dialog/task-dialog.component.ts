@@ -5,6 +5,10 @@ import { TasksService } from '../../core/tasks-api/v1';
 import { Task, TypeEnum } from '../task-factory/task.interface';
 import { TaskManager } from '../task-factory/task-manager';
 
+type fieldType = {
+  [key: string]: string | number;
+};
+
 @Component({
   selector: 'app-task-dialog',
   templateUrl: './task-dialog.component.html',
@@ -58,25 +62,27 @@ export class TaskDialogComponent implements OnDestroy {
   }
 
   saveTask() {
-    if (!this.task._id) {
-      const createSubscription = this.taskService.appControllerCreate(this.task).subscribe(() => {
-        this.tasksData = [...this.tasksData, this.task];
-        this.tasksDataChange.emit(this.tasksData);
-        this.isDialogVisibleChange.emit(false);
-        this.cdr.detectChanges();
-      });
-      this.subscriptions.add(createSubscription);
-    } else {
-      const updateSubscription = this.taskService.appControllerUpdate(this.task._id, this.task).subscribe(() => {
-        const taskToRemove = this.tasksData.findIndex((task: Task) => task._id === this.task._id);
-        if (taskToRemove !== -1) {
-          this.tasksData.splice(taskToRemove, 1, this.task);
+    if (this.task && this.task.name && this.task.type && this.isValidTaskFields(this.task.fields)) {
+      if (!this.task._id) {
+        const createSubscription = this.taskService.appControllerCreate(this.task).subscribe(() => {
+          this.tasksData = [...this.tasksData, this.task];
           this.tasksDataChange.emit(this.tasksData);
           this.isDialogVisibleChange.emit(false);
           this.cdr.detectChanges();
-        }
-      });
-      this.subscriptions.add(updateSubscription);
+        });
+        this.subscriptions.add(createSubscription);
+      } else {
+        const updateSubscription = this.taskService.appControllerUpdate(this.task._id, this.task).subscribe(() => {
+          const taskToRemove = this.tasksData.findIndex((task: Task) => task._id === this.task._id);
+          if (taskToRemove !== -1) {
+            this.tasksData.splice(taskToRemove, 1, this.task);
+            this.tasksDataChange.emit(this.tasksData);
+            this.isDialogVisibleChange.emit(false);
+            this.cdr.detectChanges();
+          }
+        });
+        this.subscriptions.add(updateSubscription);
+      }
     }
   }
 
@@ -93,5 +99,15 @@ export class TaskDialogComponent implements OnDestroy {
       default:
         return taskFieldValue;
     }
+  }
+
+  isValidTaskFields(obj: any): boolean {
+    for (const key in obj) {
+      const value = obj[key];
+      if (value === '' || value <= 0) {
+        return false;
+      }
+    }
+    return true;
   }
 }

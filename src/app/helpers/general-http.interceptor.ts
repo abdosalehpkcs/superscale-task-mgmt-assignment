@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { catchError, EMPTY, Observable, tap } from 'rxjs';
-const MESSAGE_NOTIFICATION_LIFE_TIME = 3000;
+const MESSAGE_NOTIFICATION_LIFE_TIME = 5000;
 @Injectable()
 export class GeneralHttpInterceptor implements HttpInterceptor {
   constructor(private messageService: MessageService) {}
@@ -34,12 +34,10 @@ export class GeneralHttpInterceptor implements HttpInterceptor {
         }
       }),
       catchError((error: HttpErrorResponse) => {
-        let errorMessage = '';
+        let errorMessage = this.buildErrorMessage(error.error);
 
-        if (error.status === 400) {
-          errorMessage = (error.message as any).fields?.fields ? (error.message as any).fields?.fields : 'Unknown Error';
-        } else if (error.status === 404) {
-          errorMessage = error.error.message;
+        if (error.status === 400 || error.status === 404) {
+          errorMessage = this.buildErrorMessage(error.error);
         }
 
         if (errorMessage !== '') {
@@ -61,5 +59,23 @@ export class GeneralHttpInterceptor implements HttpInterceptor {
         return EMPTY;
       }),
     );
+  }
+
+  buildErrorMessage(errorObj: { [key: string]: any }): string {
+    let errorMessage = 'Validation Error:\n';
+
+    for (const key in errorObj) {
+      errorMessage += `- ${key}:\n`;
+
+      if (typeof errorObj[key] === 'string') {
+        errorMessage += `  - ${errorObj[key]}\n`;
+      } else {
+        for (const subKey in errorObj[key]) {
+          errorMessage += `  - ${errorObj[key][subKey]}\n`;
+        }
+      }
+    }
+
+    return errorMessage;
   }
 }

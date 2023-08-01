@@ -32,7 +32,9 @@
         pInputText
         required
         autofocus />
-      <small class="p-error" *ngIf="!dynamicTaskField.value">{{ dynamicTaskField.key | titlecase }} is required.</small>
+      <small class="p-error" *ngIf="!dynamicTaskField.value || dynamicTaskField.value <= 0"
+        >{{ dynamicTaskField.key | titlecase }} is required.</small
+      >
     </div>
   </ng-template>
 
