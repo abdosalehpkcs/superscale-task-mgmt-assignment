@@ -50,11 +50,10 @@ export class GeneralHttpInterceptor implements HttpInterceptor {
             life: MESSAGE_NOTIFICATION_LIFE_TIME,
           });
         } else {
-          console.log(error);
           this.messageService.add({
             severity: 'error',
             summary: `Error ${error.status}`,
-            detail: `Uknown Error : ${error.message}`,
+            detail: error.statusText,
             life: MESSAGE_NOTIFICATION_LIFE_TIME,
           });
         }
