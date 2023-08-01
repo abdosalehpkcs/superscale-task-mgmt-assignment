@@ -60,7 +60,8 @@ export class TaskDialogComponent implements OnDestroy {
   saveTask() {
     if (!this.task._id) {
       const createSubscription = this.taskService.appControllerCreate(this.task).subscribe(() => {
-        this.tasksData.push(this.task);
+        this.tasksData = [...this.tasksData, this.task];
+        this.tasksDataChange.emit(this.tasksData);
         this.isDialogVisibleChange.emit(false);
         this.cdr.detectChanges();
       });
@@ -68,9 +69,9 @@ export class TaskDialogComponent implements OnDestroy {
     } else {
       const updateSubscription = this.taskService.appControllerUpdate(this.task._id, this.task).subscribe(() => {
         const taskToRemove = this.tasksData.findIndex((task: Task) => task._id === this.task._id);
-
         if (taskToRemove !== -1) {
           this.tasksData.splice(taskToRemove, 1, this.task);
+          this.tasksDataChange.emit(this.tasksData);
           this.isDialogVisibleChange.emit(false);
           this.cdr.detectChanges();
         }
